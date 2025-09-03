@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold Outreach System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        input, textarea, button { margin: 5px 0; padding: 8px; }
+        input[type="text"], textarea { width: 300px; }
+        button { background: #007cba; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        button:disabled { background: #ccc; }
+        .result { margin: 10px 0; padding: 10px; background: #f9f9f9; border-left: 4px solid #007cba; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .campaign { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .status { font-weight: bold; }
+        .running { color: #ffc107; }
+        .completed { color: #28a745; }
+        .failed { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cold Outreach System</h1>
+        
+        <!-- Health Check -->
+        <div class="section">
+            <h2>System Status</h2>
+            <button onclick="checkHealth()">Check Health</button>
+            <div id="health-status"></div>
+        </div>
+
+        <!-- Launch Campaign -->
+        <div class="section">
+            <h2>Launch Campaign</h2>
+            <div>
+                <label>Company Domain:</label><br>
+                <input type="text" id="domain" placeholder="example.com" required>
+            </div>
+            <div>
+                <label>Job Description (optional):</label><br>
+                <textarea id="job-description" rows="4" placeholder="Paste job description here for better personalization..."></textarea>
+            </div>
+            <div>
+                <label><input type="checkbox" id="email-enabled" checked> Enable Email Outreach</label>
+            </div>
+            <div>
+                <label><input type="checkbox" id="linkedin-enabled" checked> Enable LinkedIn Outreach</label>
+            </div>
+            <button onclick="launchCampaign()" id="launch-btn">Launch Campaign</button>
+            <div id="launch-result"></div>
+        </div>
+
+        <!-- Test Functions -->
+        <div class="section">
+            <h2>Test Functions</h2>
+            <div>
+                <h3>Test Email Connection</h3>
+                <button onclick="testEmailConnection()">Test Email Providers</button>
+                <div id="test-connection-result"></div>
+            </div>
+            <div>
+                <h3>Test Email</h3>
+                <input type="email" id="test-email" placeholder="your-email@example.com">
+                <button onclick="testEmail()">Send Test Email</button>
+                <div id="test-email-result"></div>
+            </div>
+            <div>
+                <h3>Test Email Scraper</h3>
+                <input type="text" id="test-domain" placeholder="example.com">
+                <button onclick="testScraper()">Test Scraper</button>
+                <div id="test-scraper-result"></div>
+            </div>
+        </div>
+
+        <!-- Campaign Results -->
+        <div class="section">
+            <h2>Campaign Results</h2>
+            <button onclick="loadCampaigns()">Refresh Results</button>
+            <div id="campaigns-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return { error: 'Network error: ' + error.message };
+            }
+        }
+
+        async function checkHealth() {
+            const result = await apiCall('/health');
+            const statusDiv = document.getElementById('health-status');
+            
+            if (result.error) {
+                statusDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+            } else {
+                const services = result.services;
+                statusDiv.innerHTML = `
+                    <div class="result success">
+                        ✅ System Healthy<br>
+                        AI Service: ${services.ai ? '✅' : '❌'}<br>
+                        Email Service: ${services.email ? '✅' : '❌'}<br>
+                        LinkedIn Service: ${services.linkedin ? '✅' : '❌'}
+                    </div>
+                `;
+            }
+        }
+
+        async function launchCampaign() {
+            const domain = document.getElementById('domain').value.trim();
+            const jobDescription = document.getElementById('job-description').value.trim();
+            const emailEnabled = document.getElementById('email-enabled').checked;
+            const linkedinEnabled = document.getElementById('linkedin-enabled').checked;
+            const resultDiv = document.getElementById('launch-result');
+            const launchBtn = document.getElementById('launch-btn');
+            
+            if (!domain) {
+                resultDiv.innerHTML = '<div class="result error">❌ Please enter a domain</div>';
+                return;
+            }
+            
+            if (!emailEnabled && !linkedinEnabled) {
+                resultDiv.innerHTML = '<div class="result error">❌ Please enable at least one outreach method</div>';
+                return;
+            }
+            
+            launchBtn.disabled = true;
+            launchBtn.textContent = 'Launching...';
+            
+            const result = await apiCall('/launch', 'POST', {
+                domain,
+                job_description: jobDescription,
+                email_enabled: emailEnabled,
+                linkedin_enabled: linkedinEnabled
+            });
+            
+            if (result.error) {
+                resultDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+            } else {
+                resultDiv.innerHTML = `<div class="result success">✅ Campaign launched! ID: ${result.campaign_id}</div>`;
+                // Auto-refresh campaigns in 5 seconds
+                setTimeout(loadCampaigns, 5000);
+            }
+            
+            launchBtn.disabled = false;
+            launchBtn.textContent = 'Launch Campaign';
+        }
+
+        async function testEmailConnection() {
+            const result = await apiCall('/test-email-connection', 'POST');
+            const resultDiv = document.getElementById('test-connection-result');
+            
+            if (result.error) {
+                resultDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+            } else {
+                let html = '<div class="result success">Email Connection Test Results:<br>';
+                result.connection_tests.forEach(test => {
+                    const status = test.success ? '✅' : '❌';
+                    html += `${status} ${test.provider} (${test.email})<br>`;
+                });
+                html += '</div>';
+                resultDiv.innerHTML = html;
+            }
+        }
+
+        async function testEmail() {
+            const email = document.getElementById('test-email').value.trim();
+            const resultDiv = document.getElementById('test-email-result');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="result error">❌ Please enter an email address</div>';
+                return;
+            }
+            
+            const result = await apiCall('/test-email', 'POST', { email });
+            
+            if (result.error) {
+                resultDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+            } else if (result.success) {
+                resultDiv.innerHTML = '<div class="result success">✅ Test email sent successfully!</div>';
+            } else {
+                resultDiv.innerHTML = '<div class="result error">❌ Test email failed</div>';
+            }
+        }
+
+        async function testScraper() {
+            const domain = document.getElementById('test-domain').value.trim();
+            const resultDiv = document.getElementById('test-scraper-result');
+            
+            if (!domain) {
+                resultDiv.innerHTML = '<div class="result error">❌ Please enter a domain</div>';
+                return;
+            }
+            
+            const result = await apiCall('/test-scraper', 'POST', { domain });
+            
+            if (result.error) {
+                resultDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        ✅ Found ${result.emails_found} emails for ${result.domain}<br>
+                        Sample emails: ${result.emails.join(', ') || 'None found'}
+                    </div>
+                `;
+            }
+        }
+
+        async function loadCampaigns() {
+            const result = await apiCall('/campaigns');
+            const listDiv = document.getElementById('campaigns-list');
+            
+            if (result.error) {
+                listDiv.innerHTML = `<div class="result error">❌ ${result.error}</div>`;
+                return;
+            }
+            
+            if (!result.campaigns || result.campaigns.length === 0) {
+                listDiv.innerHTML = '<div class="result">No campaigns yet</div>';
+                return;
+            }
+            
+            let html = '';
+            result.campaigns.reverse().forEach(campaign => {
+                const statusClass = campaign.status === 'running' ? 'running' : 
+                                  campaign.status === 'completed' ? 'completed' : 'failed';
+                
+                html += `
+                    <div class="campaign">
+                        <div><strong>Campaign #${campaign.id}</strong> - ${campaign.domain}</div>
+                        <div class="status ${statusClass}">Status: ${campaign.status.toUpperCase()}</div>
+                        <div>Emails Found: ${campaign.emails_found}</div>
+                        <div>Emails Sent: ${campaign.emails_sent}</div>
+                        <div>LinkedIn Sent: ${campaign.linkedin_sent}</div>
+                        ${campaign.errors && campaign.errors.length > 0 ? 
+                          `<div style="color: red;">Errors: ${campaign.errors.join(', ')}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            listDiv.innerHTML = html;
+        }
+
+        // Auto-refresh campaigns every 30 seconds
+        setInterval(loadCampaigns, 30000);
+
+        // Load campaigns on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkHealth();
+            loadCampaigns();
+        });
+    </script>
+</body>
+</html>

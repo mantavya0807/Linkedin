@@ -1,0 +1,79 @@
+Mantavya Mahajan
+(564) 544-4219 | mantavyamahajan08@gmail.com | mantavya-mahajan-portfolio.vercel.app | linkedin.com/in/mantavya-mahajan
+
+== EDUCATION ==
+The Pennsylvania State University, University Park, PA
+B.S. in Computer Science and Mathematics
+Expected Graduation: December 2025
+
+== SKILLS ==
+Programming: Python, C++, JavaScript, TypeScript, C, SQL, Bash
+Web Development: Node.js, Express, Django, Flask, React, Next.js, React Native, REST, Tailwind CSS
+Data and Databases: PostgreSQL, MongoDB, Supabase, Firebase, Redis
+Systems and Cloud: Git, Linux, Docker, Selenium, AWS (EC2, Lambda, S3), CI/CD, Kubernetes, Jenkins, pytest
+AI and ML Pipelines: FAISS, RAG, Transformers, Puppeteer, AI agents, spaCy, NLTK, Celery, MCP, LangChain
+
+== PROFESSIONAL EXPERIENCE ==
+Scale AI - Gen AI Technical Advisor Intern (Remote, US | May 2025 – Present)
+• Improved LLM code generation pass rate by 12% across Python, C++, and TypeScript by expanding hidden unit tests and tightening grading rubrics
+• Build and maintain a Python evaluation harness with deterministic sandboxes and autograders that runs 500+ test cases via pytest and reduces manual review time by 18%
+• Built a retrieval augmented pipeline with chunked parsing and FAISS retrieval to triage multiple GB log dumps, reducing analysis time per ticket by 20%
+
+M8 - Lead Backend Developer (Remote, US | August 2024 – May 2025)
+• Raised API throughput by 15% to 1,440 requests per second at p95 latency under 180 ms by redesigning routing, connection pooling, and load balancing
+• Implemented OAuth and RBAC across services on AWS, reducing auth related support tickets by 25% and simplifying access audits
+• Optimized database queries and implemented caching strategies with Redis, reducing API response time by 22% and improving overall system performance
+
+Voodies - Full Stack AI Engineer Intern (Remote, US | August 2025 – Present)
+• Built a multi-agent workflow to crawl, classify, and draft product descriptions using RAG prompts and tool calls, reducing content creation time per item from 30 minutes to 12 minutes
+• Shipped a React and Node.js dashboard with role-based access, JWT sessions, and REST APIs, enabling non-technical staff to review and publish listings in under 3 minutes
+• Containerized and deployed services on AWS EC2 with Docker and CI/CD in Jenkins, reducing deployment time from 45 minutes to 30 minutes
+
+Alchem International - Software Engineering Intern (Delhi, IN | May 2024 – August 2024)
+• Assisted in migrating critical monolith modules to Python and Django microservices, contributing to 15% reduction in deployment issues
+• Optimized PostgreSQL queries by rewriting joins and adding composite indexes, improving query performance by 18%; added CI/CD steps with Python scripts to lint, test, and deploy
+• Introduced multithreading and caching in APIs and optimized the React frontend, reducing response time by 20%
+
+Penn State AI Innovation Lab - Product Recommendation System Researcher (January 2025 – May 2025)
+• Developed a novel product recommendation system using BERT4Rec model and sentence transformers
+• Implemented LLM-based product ideation algorithm to generate unique product concepts
+• Created system to evaluate product uniqueness and feasibility using Google Search API
+• Achieved 78% accuracy in predicting successful product-market fit for new product concepts
+
+Penn State Data Science Lab - Environmental Policy Research Analyst (September 2024 – January 2025)
+• Designed and implemented a novel Environmental Policy Uncertainty Index using data mining techniques
+• Developed automated web scrapers using Python and Selenium to collect policy data from governmental sources
+• Applied natural language processing to quantify policy uncertainty across different sectors
+• Created visualization dashboards to track policy changes and their impact on environmental metrics
+
+Penn State Healthcare Innovation Lab - Medical LLM Optimization Researcher (January 2024 – May 2024)
+• Developing compact, privacy-focused language models for medical devices
+• Achieved 80% size reduction with 95% transcription accuracy
+• Optimized neural network architectures for medical applications
+• Implemented efficient data compression techniques
+
+== PROJECTS ==
+Meal Plan Optimizer (Next.js, Supabase, Django, Puppeteer, Celery, Redis | December 2024)
+• Reverse-engineered Penn State dining API to catch transactions in real-time as they happen, processing 5,000+ dining transactions across 150+ users via Next.js API and PostgreSQL
+• Implemented MFA-aware scraping with Puppeteer and idempotent Celery tasks backed by Redis, achieving 97% successful syncs over four weeks
+
+EPU Index Replication and NLP Pipeline (Python, Django, ProQuest API, spaCy, NLTK | Ongoing)
+• Ingested and labeled 50,000+ headlines from ProQuest into PostgreSQL with backoff and dedupe using Django ORM, sustaining 1,500 per minute during backfills
+• Built a TF-IDF and spaCy entity baseline with NLTK features; replicated historical EPU trends with Pearson correlation 0.72 on held-out months
+
+FinGuard (React Native, Node.js, MongoDB, Google Maps API, Gemini API | March 2025)
+• Built React Native mobile app using GPS location services to identify nearby stores and provide financial insights
+• Developed location-based recommendation with MongoDB and Google Maps API for optimal credit card suggestions
+• Integrated real-time merchant analysis and scam detection alerts based on user location and store data
+
+HomeHarmony (React, TypeScript, Supabase | 2024)
+• A comprehensive real estate platform built with React, TypeScript, and Supabase to facilitate seamless interactions between buyers and sellers
+• Implemented user authentication, property listings, and real-time communication features
+
+StockFetcher (Django, ML, APIs | 2024)
+• A Django web app providing real-time stock data analysis, backtesting capabilities, and ML-powered price predictions
+• Integrated with multiple financial APIs and implemented predictive models for market analysis
+
+Course Scheduler (MERN Stack, NLP | 2024)
+• A MERN stack application that automates course planning by scraping university data and using NLP to process course information
+• Automated course recommendation and schedule optimization for students
